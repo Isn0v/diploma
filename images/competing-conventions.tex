@@ -1,0 +1,72 @@
+\begin{figure}[h]
+  \centering
+  \begin{tikzpicture}[
+      node distance=1.5cm,
+      neuron/.style={circle, draw, minimum size=6mm, thick, inner sep=0pt},
+      input/.style={neuron, fill=white},
+      hiddenA/.style={neuron, fill=white},
+      hiddenB/.style={neuron, fill=gray!40},
+      hiddenC/.style={neuron, fill=black, text=white},
+      output/.style={neuron, fill=white},
+      edge/.style={->, >=stealth, semithick, draw=gray!80}
+  ]
+  
+  % --- ЛЕВАЯ НЕЙРОСЕТЬ ---
+  % Входы
+  \node[input, label=below:1] (I1L) at (0,0) {};
+  \node[input, label=below:2] (I2L) at (1.5,0) {};
+  
+  % Скрытый слой
+  \node[hiddenA, label=left:A] (HAL) at (-0.5, 1.5) {};
+  \node[hiddenB, label=above left:B] (HBL) at (0.75, 1.5) {};
+  \node[hiddenC, label=right:C] (HCL) at (2.0, 1.5) {};
+  
+  % Выход
+  \node[output, label=above:3] (O1L) at (0.75, 3) {};
+  
+  % Связи (Левая сеть)
+  \foreach \i in {I1L, I2L} {
+      \foreach \h in {HAL, HBL, HCL} {
+          \draw[edge] (\i) -- (\h);
+      }
+  }
+  \foreach \h in {HAL, HBL, HCL} {
+      \draw[edge] (\h) -- (O1L);
+  }
+  
+  % --- ПРАВАЯ НЕЙРОСЕТЬ ---
+  % Входы
+  \node[input, label=below:1] (I1R) at (5,0) {};
+  \node[input, label=below:2] (I2R) at (6.5,0) {};
+  
+  % Скрытый слой (Порядок узлов изменен)
+  \node[hiddenC, label=left:C] (HCR) at (4.5, 1.5) {};
+  \node[hiddenB, label=above right:B] (HBR) at (5.75, 1.5) {};
+  \node[hiddenA, label=right:A] (HAR) at (7.0, 1.5) {};
+  
+  % Выход
+  \node[output, label=above:3] (O1R) at (5.75, 3) {};
+  
+  % Связи (Правая сеть)
+  \foreach \i in {I1R, I2R} {
+      \foreach \h in {HCR, HBR, HAR} {
+          \draw[edge] (\i) -- (\h);
+      }
+  }
+  \foreach \h in {HCR, HBR, HAR} {
+      \draw[edge] (\h) -- (O1R);
+  }
+  
+  % --- ТЕКСТ ПОД РИСУНКОМ ---
+  \node[align=center] at (3.25, -1.5) {
+      $[A, B, C]$ \\
+      $\times \ [C, B, A]$ \\
+      \rule{4cm}{0.4pt} \\
+      Потомки: $[A, B, A] \quad [C, B, C]$ \\
+      \footnotesize (разрушение структуры: потеря информации)
+  };
+  
+  \end{tikzpicture}
+  \caption{Проблема конкурирующих соглашений}
+  \label{fig:competing_conventions}
+  \end{figure}
